@@ -7,16 +7,20 @@
     hostname = "https://alpha-api.app.net";
     return $.ajax({
       url: "" + hostname + "/stream/0/users/@" + username + "/posts",
+      error: function(response) {
+        if (response.status === 404) {
+          return $("<h2>" + username + " not found!</h2>").insertAfter("h1");
+        }
+      },
       success: function(posts) {
         var post, _i, _len, _ref, _results;
 
-        $("<h2>" + username + "'s posts</h2>").appendTo("body");
-        $("<ol id='posts' />").appendTo("body");
+        $("<h2>" + username + "'s posts</h2>").insertAfter("h1");
         _ref = posts.data;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           post = _ref[_i];
-          _results.push($("<li>" + post.text + "</li>").appendTo("#posts"));
+          _results.push($("<li>" + post.text + "</li>").hide().appendTo("#posts").fadeIn('slow'));
         }
         return _results;
       }
